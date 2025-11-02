@@ -3,68 +3,200 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>알람 시계</title>
+  <title>띵동</title>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
       padding: 20px;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 48px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    #digitalClock {
+      font-size: 64px;
+      font-weight: 700;
+      text-align: center;
+      margin: 20px 0 30px 0;
+      color: #333;
+      padding: 20px;
+      border-radius: 8px;
+      background-color: #fafafa;
+    }
+
+    .section {
+      background: #fafafa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .section label {
+      font-weight: 600;
+      color: #333;
+      margin-right: 10px;
+    }
+
+    .alarm-input-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      align-items: center;
+    }
+
+    select, input[type="time"] {
+      padding: 10px 15px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: white;
+      font-family: 'Pretendard', sans-serif;
+    }
+
+    select:focus, input[type="time"]:focus {
+      outline: none;
+      border-color: #666;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.2s;
+      font-family: 'Pretendard', sans-serif;
+      background: #333;
+      color: white;
+    }
+
+    button:hover {
+      background: #555;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .btn-danger {
+      background: #dc3545;
+    }
+
+    .btn-danger:hover {
+      background: #c82333;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .button-group.right {
+      margin-left: auto;
     }
     
     table {
       width: 100%;
       margin-top: 20px;
       border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #ddd;
     }
     
     th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
+      padding: 15px;
       text-align: center;
+      border-bottom: 1px solid #eee;
     }
     
     th {
-      background-color: #f2f2f2;
+      background: #fafafa;
+      color: #333;
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background: #fafafa;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    td button {
+      padding: 8px 16px;
+      font-size: 14px;
+      margin: 2px;
     }
     
-    #alarmModal {
-      display: none;
+    #alarmModal, #editModal {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       background: white;
-      padding: 30px;
-      border: 3px solid red;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
       z-index: 1000;
+      text-align: center;
+    }
+
+    #alarmModal {
+      display: none;
+      border: 3px solid #dc3545;
     }
 
     #editModal {
       display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      padding: 30px;
-      border: 2px solid #4CAF50;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      z-index: 1000;
-      border-radius: 10px;
+      border: 2px solid #333;
+    }
+
+    #alarmModal h2 {
+      font-size: 32px;
+      color: #dc3545;
+      margin-bottom: 20px;
     }
 
     #editModal h2 {
-      margin-top: 0;
-      color: #4CAF50;
-    }
-
-    #editModal input {
-      margin: 15px 0;
-      font-size: 18px;
-    }
-
-    #editModal div {
-      margin-top: 20px;
+      color: #333;
+      margin-bottom: 20px;
     }
     
     #overlay {
@@ -77,154 +209,200 @@
       background: rgba(0,0,0,0.5);
       z-index: 999;
     }
-    
-    button {
-      padding: 10px 20px;
-      margin: 5px;
-      cursor: pointer;
+
+    #uploadedFileName {
+      color: #666;
+      font-weight: 600;
+      margin-left: 10px;
     }
-    
-    input {
-      padding: 8px;
-      font-size: 16px;
+
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
     }
   </style>
 </head>
 
 <body>
-  <h1>알람 시계</h1>
-  
-  <div>
-    <input type="time" id="alarmTime">
-    <button onclick="setAlarm()">알람 설정</button>
+  <div class="container">
+    <h1>띵동</h1>
+    
+    <div id="digitalClock">00:00:00</div>
+
+    <div class="section">
+      <div>
+        <label>알림음 선택</label>
+        <select id="soundSelect">
+          <option value="beep">기본 삐소리</option>
+          <option value="sound1">웃긴 삐소리</option>
+          <option value="sound2">알람음 2</option>
+          <option value="sound3">알람음 3</option>
+          <option value="sound4">알람음 4</option>
+          <option value="sound5">알람음 5</option>
+          <option value="upload">내 파일 업로드</option>
+        </select>
+        <button onclick="handleSoundSelect()">적용</button>
+        <input type="file" id="soundFileInput" accept=".mp3,.wav,.ogg" style="display:none" onchange="handleSoundUpload(event)">
+        <span id="uploadedFileName"></span>
+      </div>
+
+      <div class="alarm-input-group">
+        <label>알람 설정</label>
+        <input type="time" id="alarmTime">
+        <button onclick="setAlarm()">설정</button>
+      </div>
+    </div>
+
+    <div class="button-row">
+      <div class="button-group">
+        <button onclick="exportToCSV()">CSV 내보내기</button>
+        <input type="file" id="csvFileInput" accept=".csv" style="display:none" onchange="importFromCSV(event)">
+        <button onclick="document.getElementById('csvFileInput').click()">CSV 불러오기</button>
+      </div>
+      <div class="button-group right">
+        <button onclick="deleteSelected()" class="btn-danger">선택 삭제</button>
+        <button onclick="deleteAll()" class="btn-danger">전체 삭제</button>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="checkAll" onchange="toggleCheckAll()"></th>
+          <th>설정 시간</th>
+          <th>편집</th>
+          <th>삭제</th>
+        </tr>
+      </thead>
+      <tbody id="alarmList"></tbody>
+    </table>
   </div>
 
-  <div style="margin-top: 10px;">
-    <button onclick="exportToCSV()">CSV 내보내기</button>
-    <input type="file" id="csvFileInput" accept=".csv" style="display:none" onchange="importFromCSV(event)">
-    <button onclick="document.getElementById('csvFileInput').click()">CSV 불러오기</button>
-  </div>
-
-  <table>
-    <thead>
-      <tr>
-        <th>설정 시간</th>
-        <th>편집</th>
-        <th>삭제</th>
-      </tr>
-    </thead>
-    <tbody id="alarmList"></tbody>
-  </table>
-
-  <!-- 알람 모달창 -->
   <div id="overlay"></div>
   <div id="alarmModal">
-    <h2>🔔 알람!</h2>
-    <p id="alarmTimeText"></p>
-    <button onclick="stopAlarm()">끄기</button>
+    <h2>알람</h2>
+    <p id="alarmTimeText" style="font-size: 24px; margin: 20px 0;"></p>
+    <button onclick="stopAlarm()" class="btn-danger" style="font-size: 18px; padding: 12px 24px;">끄기</button>
   </div>
 
-  <!-- 편집 모달창 -->
   <div id="editModal">
     <h2>알람 시간 편집</h2>
-    <p>새로운 시간을 선택하세요</p>
-    <input type="time" id="editTimeInput">
-    <div>
+    <p style="margin: 20px 0;">새로운 시간을 선택하세요</p>
+    <input type="time" id="editTimeInput" style="font-size: 18px; padding: 12px;">
+    <div style="margin-top: 20px;">
       <button onclick="saveEdit()">저장</button>
-      <button onclick="cancelEdit()">취소</button>
+      <button onclick="cancelEdit()" class="btn-danger">취소</button>
     </div>
   </div>
 
   <script>
-    let alarms = []; // 알람 목록
+    let alarms = [];
     let audioContext = null;
     let oscillator = null;
     let isAlarmRinging = false;
-    let editingIndex = -1; // 편집 중인 알람의 인덱스
+    let editingIndex = -1;
+    let currentSoundType = 'beep';
+    let uploadedSoundURL = null;
+    let currentAudio = null;
 
-    // 알람 설정 함수
+    const soundFiles = {
+      sound1: 'sounds/alarm1.mp3',
+      sound2: 'sounds/alarm2.mp3',
+      sound3: 'sounds/alarm3.mp3',
+      sound4: 'sounds/alarm4.mp3',
+      sound5: 'sounds/alarm5.mp3'
+    };
+
     function setAlarm() {
       const timeInput = document.getElementById('alarmTime').value;
       
       if (timeInput) {
-        // 중복 확인
         if (alarms.includes(timeInput)) {
           alert('이미 설정된 시간입니다!');
           return;
         }
         
         alarms.push(timeInput);
-        saveToLocalStorage(); // 로컬 저장
-        displayAlarms(); // 표에 표시
+        saveToLocalStorage();
+        displayAlarms();
         alert('설정 완료');
-        document.getElementById('alarmTime').value = ''; // 입력창 초기화
+        document.getElementById('alarmTime').value = '';
       } else {
         alert('시간을 선택해주세요!');
       }
     }
 
-    // 알람 삭제 함수
     function deleteAlarm(index) {
-      alarms.splice(index, 1); // 배열에서 제거
-      saveToLocalStorage(); // 로컬 저장
-      displayAlarms(); // 표 다시 그리기
+      alarms.splice(index, 1);
+      saveToLocalStorage();
+      displayAlarms();
     }
 
-    // 알람 편집 함수
     function editAlarm(index) {
-      editingIndex = index; // 편집 중인 인덱스 저장
-      document.getElementById('editTimeInput').value = alarms[index]; // 현재 시간 표시
+      editingIndex = index;
+      document.getElementById('editTimeInput').value = alarms[index];
       document.getElementById('overlay').style.display = 'block';
       document.getElementById('editModal').style.display = 'block';
     }
 
-    // 편집 저장 함수
     function saveEdit() {
       const newTime = document.getElementById('editTimeInput').value;
       
       if (newTime) {
-        // 중복 확인 (자기 자신 제외)
         if (alarms.includes(newTime) && alarms[editingIndex] !== newTime) {
           alert('이미 설정된 시간입니다!');
           return;
         }
         
-        alarms[editingIndex] = newTime; // 시간 수정
-        saveToLocalStorage(); // 로컬 저장
-        displayAlarms(); // 표 다시 그리기
-        cancelEdit(); // 모달 닫기
+        alarms[editingIndex] = newTime;
+        saveToLocalStorage();
+        displayAlarms();
+        cancelEdit();
         alert('수정 완료');
       } else {
         alert('시간을 선택해주세요!');
       }
     }
 
-    // 편집 취소 함수
     function cancelEdit() {
       document.getElementById('overlay').style.display = 'none';
       document.getElementById('editModal').style.display = 'none';
       editingIndex = -1;
     }
 
-    // 표에 알람 목록 표시
     function displayAlarms() {
       const list = document.getElementById('alarmList');
       
       if (alarms.length === 0) {
-        list.innerHTML = '<tr><td colspan="3">설정된 알람이 없습니다</td></tr>';
+        list.innerHTML = '<tr><td colspan="4" style="padding: 30px; color: #999;">설정된 알람이 없습니다</td></tr>';
       } else {
         list.innerHTML = alarms.map((alarm, index) => `
           <tr>
-            <td>${alarm}</td>
+            <td><input type="checkbox" class="alarmCheckbox" data-index="${index}"></td>
+            <td style="font-weight: 600; font-size: 18px;">${alarm}</td>
             <td><button onclick="editAlarm(${index})">편집</button></td>
-            <td><button onclick="deleteAlarm(${index})">삭제</button></td>
+            <td><button onclick="deleteAlarm(${index})" class="btn-danger">삭제</button></td>
           </tr>
         `).join('');
       }
+      
+      document.getElementById('checkAll').checked = false;
     }
 
-    // 소리 재생 함수
     function playAlarmSound() {
+      if (currentSoundType === 'beep') {
+        playBeepSound();
+      } else if (currentSoundType === 'upload' && uploadedSoundURL) {
+        playUploadedSound(uploadedSoundURL);
+      } else if (soundFiles[currentSoundType]) {
+        playUploadedSound(soundFiles[currentSoundType]);
+      } else {
+        playBeepSound();
+      }
+    }
+
+    function playBeepSound() {
       audioContext = new (window.AudioContext || window.webkitAudioContext)();
       oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
@@ -232,32 +410,39 @@
       oscillator.connect(gainNode);
       gainNode.connect(audioContext.destination);
       
-      oscillator.frequency.value = 800; // 소리 높이
-      oscillator.type = 'sine'; // 소리 파형
+      oscillator.frequency.value = 800;
+      oscillator.type = 'sine';
       
-      // 소리 크기 조절
       gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
       
       oscillator.start();
       
-      // 소리를 계속 반복하기 위해 멈추고 다시 시작
       isAlarmRinging = true;
       repeatSound();
     }
 
-    // 소리 반복 함수
+    function playUploadedSound(url) {
+      currentAudio = new Audio(url);
+      currentAudio.loop = true;
+      currentAudio.play().catch(error => {
+        console.error('소리 재생 실패:', error);
+        alert('알림음 파일을 찾을 수 없습니다. 기본 삐소리로 재생합니다.');
+        playBeepSound();
+      });
+      isAlarmRinging = true;
+    }
+
     function repeatSound() {
       if (isAlarmRinging) {
         setTimeout(() => {
           if (isAlarmRinging && oscillator) {
             oscillator.stop();
-            playAlarmSound(); // 다시 재생
+            playAlarmSound();
           }
         }, 1000);
       }
     }
 
-    // 알람 표시 함수
     function showAlarm(alarmTime) {
       document.getElementById('alarmTimeText').textContent = `설정 시간: ${alarmTime}`;
       document.getElementById('overlay').style.display = 'block';
@@ -265,11 +450,9 @@
       playAlarmSound();
     }
 
-    // 알람 끄기 함수
     function stopAlarm() {
       isAlarmRinging = false;
       
-      // 소리 정지
       if (oscillator) {
         oscillator.stop();
         oscillator = null;
@@ -279,12 +462,55 @@
         audioContext = null;
       }
       
-      // 모달창 숨기기
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        currentAudio = null;
+      }
+      
       document.getElementById('overlay').style.display = 'none';
       document.getElementById('alarmModal').style.display = 'none';
     }
 
-    // 1초마다 현재 시간 확인
+    function handleSoundSelect() {
+      const select = document.getElementById('soundSelect');
+      const selectedValue = select.value;
+      
+      if (selectedValue === 'upload') {
+        document.getElementById('soundFileInput').click();
+      } else {
+        currentSoundType = selectedValue;
+        document.getElementById('uploadedFileName').textContent = '';
+        
+        if (selectedValue === 'beep') {
+          alert('기본 삐소리로 설정되었습니다.');
+        } else {
+          alert(select.options[select.selectedIndex].text + '로 설정되었습니다.');
+        }
+      }
+    }
+
+    function handleSoundUpload(event) {
+      const file = event.target.files[0];
+      
+      if (file) {
+        if (uploadedSoundURL) {
+          URL.revokeObjectURL(uploadedSoundURL);
+        }
+        
+        uploadedSoundURL = URL.createObjectURL(file);
+        currentSoundType = 'upload';
+        document.getElementById('uploadedFileName').textContent = ` (${file.name})`;
+        alert('알림음이 설정되었습니다: ' + file.name);
+      } else {
+        document.getElementById('soundSelect').value = 'beep';
+        currentSoundType = 'beep';
+        document.getElementById('uploadedFileName').textContent = '';
+      }
+      
+      event.target.value = '';
+    }
+
     setInterval(() => {
       const now = new Date();
       const hours = now.getHours();
@@ -293,28 +519,19 @@
       const currentTime = hours.toString().padStart(2, '0') + ':' + 
                          minutes.toString().padStart(2, '0');
 
-      // 초가 0일 때만 확인 (1분에 한 번만 체크)
       if (seconds === 0) {
-        alarms.forEach((alarm, index) => {
+        alarms.forEach((alarm) => {
           if (alarm === currentTime && !isAlarmRinging) {
             showAlarm(alarm);
-            // 울린 알람은 목록에서 제거
-            deleteAlarm(index);
           }
         });
       }
     }, 1000);
 
-    // 페이지 로드 시 빈 표 표시
-    loadFromLocalStorage(); // 저장된 데이터 불러오기
-    displayAlarms();
-
-    // 로컬 저장소에 저장
     function saveToLocalStorage() {
       localStorage.setItem('alarms', JSON.stringify(alarms));
     }
 
-    // 로컬 저장소에서 불러오기
     function loadFromLocalStorage() {
       const saved = localStorage.getItem('alarms');
       if (saved) {
@@ -322,20 +539,17 @@
       }
     }
 
-    // CSV 파일로 내보내기
     function exportToCSV() {
       if (alarms.length === 0) {
         alert('저장할 알람이 없습니다!');
         return;
       }
 
-      // CSV 내용 만들기
       let csvContent = "알람시간\n";
       alarms.forEach(alarm => {
         csvContent += alarm + "\n";
       });
 
-      // 파일 다운로드
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement("a");
       const url = URL.createObjectURL(blob);
@@ -350,7 +564,6 @@
       alert('CSV 파일로 내보내기 완료!');
     }
 
-    // CSV 파일에서 불러오기
     function importFromCSV(event) {
       const file = event.target.files[0];
       
@@ -363,11 +576,9 @@
         const text = e.target.result;
         const lines = text.split('\n');
         
-        // 첫 줄(헤더) 제외하고 데이터 읽기
         const newAlarms = [];
         for (let i = 1; i < lines.length; i++) {
           const time = lines[i].trim();
-          // 시간 형식 검증
           if (time && /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(time)) {
             if (!alarms.includes(time) && !newAlarms.includes(time)) {
               newAlarms.push(time);
@@ -377,7 +588,7 @@
         
         if (newAlarms.length > 0) {
           alarms = alarms.concat(newAlarms);
-          saveToLocalStorage(); // 로컬 저장
+          saveToLocalStorage();
           displayAlarms();
           alert(`${newAlarms.length}개의 알람을 불러왔습니다!`);
         } else {
@@ -386,9 +597,66 @@
       };
       
       reader.readAsText(file);
-      
-      // 파일 입력 초기화 (같은 파일 다시 선택 가능하도록)
       event.target.value = '';
+    }
+
+    loadFromLocalStorage();
+    displayAlarms();
+    
+    function updateDigitalClock() {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const seconds = now.getSeconds().toString().padStart(2, '0');
+      document.getElementById('digitalClock').textContent = `${hours}:${minutes}:${seconds}`;
+    }
+    
+    updateDigitalClock();
+    setInterval(updateDigitalClock, 1000);
+    
+    function toggleCheckAll() {
+      const checkAll = document.getElementById('checkAll');
+      const checkboxes = document.querySelectorAll('.alarmCheckbox');
+      checkboxes.forEach(cb => cb.checked = checkAll.checked);
+    }
+    
+    function deleteSelected() {
+      const checkboxes = document.querySelectorAll('.alarmCheckbox:checked');
+      
+      if (checkboxes.length === 0) {
+        alert('삭제할 알람을 선택해주세요!');
+        return;
+      }
+      
+      if (!confirm(`${checkboxes.length}개의 알람을 삭제하시겠습니까?`)) {
+        return;
+      }
+      
+      const indices = Array.from(checkboxes).map(cb => parseInt(cb.dataset.index)).sort((a, b) => b - a);
+      
+      indices.forEach(index => {
+        alarms.splice(index, 1);
+      });
+      
+      saveToLocalStorage();
+      displayAlarms();
+      alert('선택한 알람이 삭제되었습니다.');
+    }
+    
+    function deleteAll() {
+      if (alarms.length === 0) {
+        alert('삭제할 알람이 없습니다!');
+        return;
+      }
+      
+      if (!confirm(`모든 알람(${alarms.length}개)을 삭제하시겠습니까?`)) {
+        return;
+      }
+      
+      alarms = [];
+      saveToLocalStorage();
+      displayAlarms();
+      alert('모든 알람이 삭제되었습니다.');
     }
   </script>
 </body>
