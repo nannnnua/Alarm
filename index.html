@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>띵동</title>
-  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Climate+Crisis&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -14,100 +17,99 @@
 
     body {
       font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f5f5f5;
+      background: #1a1a1a;
       min-height: 100vh;
       padding: 20px;
+      transition: background 0.3s ease;
+    }
+
+    body.light-mode {
+      background: #f5f5f5;
     }
     
     .container {
       max-width: 900px;
       margin: 0 auto;
-      background: white;
+      background: #2d2d2d;
       border-radius: 12px;
       padding: 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      min-height: 150vh;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    body.light-mode .container {
+      background: white;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    h1 {
-      text-align: center;
-      font-size: 48px;
-      color: #333;
-      margin-bottom: 10px;
-    }
-
-    #digitalClock {
-      font-size: 64px;
-      font-weight: 700;
-      text-align: center;
-      margin: 20px 0 30px 0;
-      color: #333;
-      padding: 20px;
-      border-radius: 8px;
-      background-color: #fafafa;
-    }
-
-    .section {
-      background: #fafafa;
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-    }
-
-    .section label {
-      font-weight: 600;
-      color: #333;
-      margin-right: 10px;
-    }
-
-    .alarm-input-group {
+    .header {
       display: flex;
-      gap: 10px;
-      margin-top: 15px;
-      align-items: center;
+      justify-content: flex-end;
+      margin-bottom: 20px;
     }
 
-    select, input[type="time"] {
-      padding: 10px 15px;
-      font-size: 16px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      background: white;
-      font-family: 'Pretendard', sans-serif;
-    }
-
-    select:focus, input[type="time"]:focus {
-      outline: none;
-      border-color: #666;
-    }
-
-    button {
+    .theme-toggle {
       padding: 10px 20px;
-      margin: 5px;
-      cursor: pointer;
-      border: none;
+      background: #444;
+      color: white;
+      border: 2px solid #444;
       border-radius: 6px;
-      font-size: 16px;
-      font-weight: 600;
-      transition: all 0.2s;
+      cursor: pointer;
       font-family: 'Pretendard', sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      background: #555;
+      border-color: #555;
+    }
+
+    body.light-mode .theme-toggle {
+      background: transparent;
+      color: #333;
+      border-color: #333;
+    }
+
+    body.light-mode .theme-toggle:hover {
       background: #333;
       color: white;
     }
 
-    button:hover {
-      background: #555;
+    h1 {
+      display: none;
     }
 
-    button:active {
-      transform: scale(0.98);
+    #digitalClock {
+      font-family: 'Climate Crisis', cursive;
+      font-weight: 400;
+      text-align: center;
+      margin: 20px auto 30px auto;
+      color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      background-color: #1a1a1a;
+      font-size: 20vw;
+      position: sticky;
+      top: 20px;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    .btn-danger {
-      background: #dc3545;
+    body.light-mode #digitalClock {
+      color: #333;
+      background-color: #fafafa;
     }
 
-    .btn-danger:hover {
-      background: #c82333;
+    #digitalClock .seconds {
+      transition: opacity 0.5s ease, width 0.5s ease;
+      display: inline-block;
+      overflow: hidden;
     }
 
     .button-row {
@@ -128,30 +130,108 @@
     .button-group.right {
       margin-left: auto;
     }
+
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      border: 2px solid #444;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.2s;
+      font-family: 'Pretendard', sans-serif;
+      background: #444;
+      color: white;
+    }
+
+    button:hover {
+      background: #555;
+      border-color: #555;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    body.light-mode button {
+      background: transparent;
+      color: #333;
+      border-color: #333;
+    }
+
+    body.light-mode button:hover {
+      background: #333;
+      color: white;
+    }
+
+    .btn-danger {
+      background: transparent;
+      color: #dc3545;
+      border: 2px solid #dc3545;
+    }
+
+    .btn-danger:hover {
+      background: #dc3545;
+      color: white;
+    }
+
+    body.light-mode .btn-danger {
+      background: transparent;
+      color: #dc3545;
+      border-color: #dc3545;
+    }
+
+    body.light-mode .btn-danger:hover {
+      background: #dc3545;
+      color: white;
+    }
     
     table {
       width: 100%;
       margin-top: 20px;
       border-collapse: collapse;
-      background: white;
+      background: #2d2d2d;
       border-radius: 8px;
       overflow: hidden;
+      border: 1px solid #444;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    body.light-mode table {
+      background: white;
       border: 1px solid #ddd;
     }
     
     th, td {
       padding: 15px;
       text-align: center;
+      border-bottom: 1px solid #444;
+      color: #fff;
+      transition: border-color 0.3s ease, color 0.3s ease;
+    }
+
+    body.light-mode th,
+    body.light-mode td {
       border-bottom: 1px solid #eee;
+      color: #333;
     }
     
     th {
-      background: #fafafa;
-      color: #333;
+      background: #1a1a1a;
       font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    body.light-mode th {
+      background: #fafafa;
     }
 
     tr:hover {
+      background: #3a3a3a;
+    }
+
+    body.light-mode tr:hover {
       background: #fafafa;
     }
 
@@ -165,17 +245,24 @@
       margin: 2px;
     }
     
-    #alarmModal, #editModal {
+    #alarmModal, #editModal, #settingsModal {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: white;
+      background: #2d2d2d;
       padding: 40px;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.3);
       z-index: 1000;
       text-align: center;
+      transition: background 0.3s ease;
+    }
+
+    body.light-mode #alarmModal,
+    body.light-mode #editModal,
+    body.light-mode #settingsModal {
+      background: white;
     }
 
     #alarmModal {
@@ -183,9 +270,18 @@
       border: 3px solid #dc3545;
     }
 
-    #editModal {
+    #editModal, #settingsModal {
       display: none;
-      border: 2px solid #333;
+      border: 2px solid #444;
+      max-width: 500px;
+      width: 90%;
+      text-align: left;
+      z-index: 1001;
+    }
+
+    body.light-mode #editModal,
+    body.light-mode #settingsModal {
+      border-color: #ddd;
     }
 
     #alarmModal h2 {
@@ -194,9 +290,18 @@
       margin-bottom: 20px;
     }
 
-    #editModal h2 {
-      color: #333;
+    #editModal h2,
+    #settingsModal h2 {
+      color: #fff;
       margin-bottom: 20px;
+      font-size: 24px;
+      transition: color 0.3s ease;
+      text-align: center;
+    }
+
+    body.light-mode #editModal h2,
+    body.light-mode #settingsModal h2 {
+      color: #333;
     }
     
     #overlay {
@@ -207,13 +312,18 @@
       width: 100%;
       height: 100%;
       background: rgba(0,0,0,0.5);
-      z-index: 999;
+      z-index: 998;
     }
 
     #uploadedFileName {
-      color: #666;
+      color: #aaa;
       font-weight: 600;
       margin-left: 10px;
+      transition: color 0.3s ease;
+    }
+
+    body.light-mode #uploadedFileName {
+      color: #666;
     }
 
     input[type="checkbox"] {
@@ -221,38 +331,206 @@
       height: 18px;
       cursor: pointer;
     }
+
+    .context-menu {
+      display: none;
+      position: fixed;
+      background: #2d2d2d;
+      border: 1px solid #444;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 1000;
+      min-width: 120px;
+      padding: 5px 0;
+    }
+
+    body.light-mode .context-menu {
+      background: white;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .context-menu-item {
+      padding: 10px 20px;
+      cursor: pointer;
+      color: #fff;
+      transition: background 0.2s;
+    }
+
+    body.light-mode .context-menu-item {
+      color: #333;
+    }
+
+    .context-menu-item:hover {
+      background: #3a3a3a;
+    }
+
+    body.light-mode .context-menu-item:hover {
+      background: #f5f5f5;
+    }
+
+    .context-menu-item.delete {
+      color: #dc3545;
+    }
+
+    .context-menu-item.delete:hover {
+      background: #dc3545;
+      color: white;
+    }
+
+    .floating-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #444;
+      color: white;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .floating-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+    }
+
+    body.light-mode .floating-button {
+      background: #333;
+      color: white;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    body.light-mode .floating-button:hover {
+      background: #555;
+      color: white;
+    }
+
+    .modal-section {
+      margin-bottom: 20px;
+    }
+
+    .modal-section label {
+      display: block;
+      margin-bottom: 10px;
+      color: #fff;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    body.light-mode .modal-section label {
+      color: #333;
+    }
+
+    .modal-section select,
+    .modal-section input[type="time"] {
+      width: 100%;
+      padding: 10px 15px;
+      font-size: 16px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background: #1a1a1a;
+      color: #fff;
+      font-family: 'Pretendard', sans-serif;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    body.light-mode .modal-section select,
+    body.light-mode .modal-section input[type="time"] {
+      background: white;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+
+    .modal-section select:focus,
+    .modal-section input[type="time"]:focus {
+      outline: none;
+      border-color: #666;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .modal-buttons button {
+      flex: 1;
+    }
+
+    .confirm-modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #2d2d2d;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      z-index: 1001;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    body.light-mode .confirm-modal {
+      background: white;
+    }
+
+    .confirm-modal h3 {
+      color: #fff;
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+
+    body.light-mode .confirm-modal h3 {
+      color: #333;
+    }
+
+    .confirm-modal p {
+      color: #aaa;
+      margin-bottom: 25px;
+      font-size: 16px;
+    }
+
+    body.light-mode .confirm-modal p {
+      color: #666;
+    }
+
+    .confirm-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .confirm-buttons button {
+      flex: 1;
+      padding: 12px 20px;
+      font-size: 16px;
+    }
   </style>
 </head>
 
 <body>
   <div class="container">
+    <div class="header">
+      <button class="theme-toggle" onclick="toggleTheme()">☀️ 라이트모드</button>
+    </div>
+    
     <h1>띵동</h1>
     
     <div id="digitalClock">00:00:00</div>
-
-    <div class="section">
-      <div>
-        <label>알림음 선택</label>
-        <select id="soundSelect">
-          <option value="beep">기본 삐소리</option>
-          <option value="sound1">웃긴 삐소리</option>
-          <option value="sound2">알람음 2</option>
-          <option value="sound3">알람음 3</option>
-          <option value="sound4">알람음 4</option>
-          <option value="sound5">알람음 5</option>
-          <option value="upload">내 파일 업로드</option>
-        </select>
-        <button onclick="handleSoundSelect()">적용</button>
-        <input type="file" id="soundFileInput" accept=".mp3,.wav,.ogg" style="display:none" onchange="handleSoundUpload(event)">
-        <span id="uploadedFileName"></span>
-      </div>
-
-      <div class="alarm-input-group">
-        <label>알람 설정</label>
-        <input type="time" id="alarmTime">
-        <button onclick="setAlarm()">설정</button>
-      </div>
-    </div>
 
     <div class="button-row">
       <div class="button-group">
@@ -261,25 +539,71 @@
         <button onclick="document.getElementById('csvFileInput').click()">CSV 불러오기</button>
       </div>
       <div class="button-group right">
-        <button onclick="deleteSelected()" class="btn-danger">선택 삭제</button>
-        <button onclick="deleteAll()" class="btn-danger">전체 삭제</button>
+        <button id="deleteAllBtn" class="btn-danger">전체 삭제</button>
       </div>
     </div>
 
     <table>
       <thead>
         <tr>
-          <th><input type="checkbox" id="checkAll" onchange="toggleCheckAll()"></th>
           <th>설정 시간</th>
           <th>편집</th>
-          <th>삭제</th>
         </tr>
       </thead>
       <tbody id="alarmList"></tbody>
     </table>
   </div>
 
+  <!-- 컨텍스트 메뉴 -->
+  <div id="contextMenu" class="context-menu">
+    <div class="context-menu-item" onclick="duplicateAlarm()">복제</div>
+    <div class="context-menu-item delete" onclick="deleteAlarmFromContext()">삭제</div>
+  </div>
+
+  <!-- 확인 모달 -->
+  <div id="confirmModal" class="confirm-modal">
+    <h3>전체 삭제 확인</h3>
+    <p id="confirmMessage">모든 알람을 삭제하시겠습니까?</p>
+    <div class="confirm-buttons">
+      <button onclick="confirmDeleteAll()" class="btn-danger">삭제</button>
+      <button onclick="cancelDeleteAll()">취소</button>
+    </div>
+  </div>
+
+  <button class="floating-button" id="floatingBtn">+</button>
+
+  <div id="settingsModal">
+    <h2>알람 설정</h2>
+    
+    <div class="modal-section">
+      <label>알림음 선택</label>
+      <select id="soundSelect">
+        <option value="beep">기본 삐소리</option>
+        <option value="sound1">웃긴 삐소리</option>
+        <option value="sound2">알람음 2</option>
+        <option value="sound3">알람음 3</option>
+        <option value="sound4">알람음 4</option>
+        <option value="sound5">알람음 5</option>
+        <option value="upload">내 파일 업로드</option>
+      </select>
+      <input type="file" id="soundFileInput" accept=".mp3,.wav,.ogg" style="display:none" onchange="handleSoundUpload(event)">
+      <span id="uploadedFileName"></span>
+    </div>
+
+    <div class="modal-section">
+      <label>알람 시간</label>
+      <input type="time" id="alarmTime" required onclick="console.log('Input clicked')" onfocus="console.log('Input focused')">
+      <p style="font-size: 12px; color: #aaa; margin-top: 5px;">HH:MM 형식 (예: 09:30)</p>
+    </div>
+
+    <div class="modal-buttons">
+      <button id="setAlarmBtn" type="button">알람 설정</button>
+      <button id="closeModalBtn" type="button" class="btn-danger">닫기</button>
+    </div>
+  </div>
+
   <div id="overlay"></div>
+  
   <div id="alarmModal">
     <h2>알람</h2>
     <p id="alarmTimeText" style="font-size: 24px; margin: 20px 0;"></p>
@@ -287,10 +611,27 @@
   </div>
 
   <div id="editModal">
-    <h2>알람 시간 편집</h2>
-    <p style="margin: 20px 0;">새로운 시간을 선택하세요</p>
-    <input type="time" id="editTimeInput" style="font-size: 18px; padding: 12px;">
-    <div style="margin-top: 20px;">
+    <h2>알람 편집</h2>
+    
+    <div class="modal-section">
+      <label>알림음 선택</label>
+      <select id="editSoundSelect">
+        <option value="beep">기본 삐소리</option>
+        <option value="sound1">웃긴 삐소리</option>
+        <option value="sound2">알람음 2</option>
+        <option value="sound3">알람음 3</option>
+        <option value="sound4">알람음 4</option>
+        <option value="sound5">알람음 5</option>
+        <option value="upload">내 파일 업로드</option>
+      </select>
+    </div>
+    
+    <div class="modal-section">
+      <label>알람 시간</label>
+      <input type="time" id="editTimeInput">
+    </div>
+    
+    <div class="modal-buttons">
       <button onclick="saveEdit()">저장</button>
       <button onclick="cancelEdit()" class="btn-danger">취소</button>
     </div>
@@ -298,6 +639,7 @@
 
   <script>
     let alarms = [];
+    let alarmSounds = {}; // 각 알람의 알림음 저장
     let audioContext = null;
     let oscillator = null;
     let isAlarmRinging = false;
@@ -305,6 +647,8 @@
     let currentSoundType = 'beep';
     let uploadedSoundURL = null;
     let currentAudio = null;
+    let secondsElement = null;
+    let contextMenuIndex = -1; // 컨텍스트 메뉴에서 선택된 알람 인덱스
 
     const soundFiles = {
       sound1: 'sounds/alarm1.mp3',
@@ -313,6 +657,38 @@
       sound4: 'sounds/alarm4.mp3',
       sound5: 'sounds/alarm5.mp3'
     };
+
+    function openSettingsModal() {
+      document.getElementById('settingsModal').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settingsModal').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    function setAlarmFromModal() {
+      const timeValue = document.getElementById('alarmTime').value;
+      console.log('Time value:', timeValue); // 디버깅용
+      
+      if (timeValue) {
+        if (alarms.includes(timeValue)) {
+          alert('이미 설정된 시간입니다!');
+          return;
+        }
+        
+        alarms.push(timeValue);
+        alarmSounds[timeValue] = currentSoundType;
+        saveToLocalStorage();
+        displayAlarms();
+        alert('설정 완료');
+        document.getElementById('alarmTime').value = '';
+        closeSettingsModal();
+      } else {
+        alert('시간을 선택해주세요!');
+      }
+    }
 
     function setAlarm() {
       const timeInput = document.getElementById('alarmTime').value;
@@ -324,6 +700,7 @@
         }
         
         alarms.push(timeInput);
+        alarmSounds[timeInput] = currentSoundType; // 알림음 저장
         saveToLocalStorage();
         displayAlarms();
         alert('설정 완료');
@@ -333,21 +710,17 @@
       }
     }
 
-    function deleteAlarm(index) {
-      alarms.splice(index, 1);
-      saveToLocalStorage();
-      displayAlarms();
-    }
-
     function editAlarm(index) {
       editingIndex = index;
       document.getElementById('editTimeInput').value = alarms[index];
+      document.getElementById('editSoundSelect').value = currentSoundType;
       document.getElementById('overlay').style.display = 'block';
       document.getElementById('editModal').style.display = 'block';
     }
 
     function saveEdit() {
       const newTime = document.getElementById('editTimeInput').value;
+      const newSound = document.getElementById('editSoundSelect').value;
       
       if (newTime) {
         if (alarms.includes(newTime) && alarms[editingIndex] !== newTime) {
@@ -355,7 +728,18 @@
           return;
         }
         
+        const oldTime = alarms[editingIndex];
         alarms[editingIndex] = newTime;
+        
+        // 알림음 업데이트
+        delete alarmSounds[oldTime];
+        if (newSound === 'upload') {
+          document.getElementById('soundFileInput').click();
+          alarmSounds[newTime] = 'upload';
+        } else {
+          alarmSounds[newTime] = newSound;
+        }
+        
         saveToLocalStorage();
         displayAlarms();
         cancelEdit();
@@ -375,19 +759,24 @@
       const list = document.getElementById('alarmList');
       
       if (alarms.length === 0) {
-        list.innerHTML = '<tr><td colspan="4" style="padding: 30px; color: #999;">설정된 알람이 없습니다</td></tr>';
+        list.innerHTML = '<tr><td colspan="2" style="padding: 30px; color: #999;">설정된 알람이 없습니다</td></tr>';
       } else {
         list.innerHTML = alarms.map((alarm, index) => `
-          <tr>
-            <td><input type="checkbox" class="alarmCheckbox" data-index="${index}"></td>
+          <tr data-index="${index}">
             <td style="font-weight: 600; font-size: 18px;">${alarm}</td>
             <td><button onclick="editAlarm(${index})">편집</button></td>
-            <td><button onclick="deleteAlarm(${index})" class="btn-danger">삭제</button></td>
           </tr>
         `).join('');
+        
+        // 각 행에 우클릭 이벤트 추가
+        const rows = list.querySelectorAll('tr[data-index]');
+        rows.forEach((row, idx) => {
+          row.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            showContextMenu(e, idx);
+          });
+        });
       }
-      
-      document.getElementById('checkAll').checked = false;
     }
 
     function playAlarmSound() {
@@ -447,7 +836,15 @@
       document.getElementById('alarmTimeText').textContent = `설정 시간: ${alarmTime}`;
       document.getElementById('overlay').style.display = 'block';
       document.getElementById('alarmModal').style.display = 'block';
+      
+      // 해당 알람의 알림음 사용
+      const savedSound = alarmSounds[alarmTime] || 'beep';
+      const previousSound = currentSoundType;
+      currentSoundType = savedSound;
+      
       playAlarmSound();
+      
+      currentSoundType = previousSound; // 원래 설정으로 복원
     }
 
     function stopAlarm() {
@@ -481,12 +878,6 @@
       } else {
         currentSoundType = selectedValue;
         document.getElementById('uploadedFileName').textContent = '';
-        
-        if (selectedValue === 'beep') {
-          alert('기본 삐소리로 설정되었습니다.');
-        } else {
-          alert(select.options[select.selectedIndex].text + '로 설정되었습니다.');
-        }
       }
     }
 
@@ -530,12 +921,18 @@
 
     function saveToLocalStorage() {
       localStorage.setItem('alarms', JSON.stringify(alarms));
+      localStorage.setItem('alarmSounds', JSON.stringify(alarmSounds));
     }
 
     function loadFromLocalStorage() {
       const saved = localStorage.getItem('alarms');
       if (saved) {
         alarms = JSON.parse(saved);
+      }
+      
+      const savedSounds = localStorage.getItem('alarmSounds');
+      if (savedSounds) {
+        alarmSounds = JSON.parse(savedSounds);
       }
     }
 
@@ -545,9 +942,10 @@
         return;
       }
 
-      let csvContent = "알람시간\n";
+      let csvContent = "알람시간,알림음\n";
       alarms.forEach(alarm => {
-        csvContent += alarm + "\n";
+        const sound = alarmSounds[alarm] || 'beep';
+        csvContent += `${alarm},${sound}\n`;
       });
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -578,10 +976,17 @@
         
         const newAlarms = [];
         for (let i = 1; i < lines.length; i++) {
-          const time = lines[i].trim();
+          const line = lines[i].trim();
+          if (!line) continue;
+          
+          const parts = line.split(',');
+          const time = parts[0].trim();
+          const sound = parts[1] ? parts[1].trim() : 'beep';
+          
           if (time && /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(time)) {
             if (!alarms.includes(time) && !newAlarms.includes(time)) {
               newAlarms.push(time);
+              alarmSounds[time] = sound;
             }
           }
         }
@@ -603,16 +1008,100 @@
     loadFromLocalStorage();
     displayAlarms();
     
+    function toggleTheme() {
+      const body = document.body;
+      const button = document.querySelector('.theme-toggle');
+      
+      body.classList.toggle('light-mode');
+      
+      if (body.classList.contains('light-mode')) {
+        button.textContent = '🌙 다크모드';
+        localStorage.setItem('theme', 'light');
+      } else {
+        button.textContent = '☀️ 라이트모드';
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+    
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      document.body.classList.add('light-mode');
+      document.querySelector('.theme-toggle').textContent = '🌙 다크모드';
+    }
+
+    document.getElementById('soundSelect').addEventListener('change', handleSoundSelect);
+    document.getElementById('floatingBtn').addEventListener('click', openSettingsModal);
+    document.getElementById('setAlarmBtn').addEventListener('click', setAlarmFromModal);
+    document.getElementById('closeModalBtn').addEventListener('click', closeSettingsModal);
+    document.getElementById('deleteAllBtn').addEventListener('click', deleteAll);
+    
+    // 컨텍스트 메뉴 외부 클릭 시 닫기
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('#contextMenu')) {
+        hideContextMenu();
+      }
+    });
+    
+    const editSoundSelect = document.getElementById('editSoundSelect');
+    if (editSoundSelect) {
+      editSoundSelect.addEventListener('change', function() {
+        if (this.value === 'upload') {
+          document.getElementById('soundFileInput').click();
+        }
+      });
+    }
+    
     function updateDigitalClock() {
       const now = new Date();
       const hours = now.getHours().toString().padStart(2, '0');
       const minutes = now.getMinutes().toString().padStart(2, '0');
       const seconds = now.getSeconds().toString().padStart(2, '0');
-      document.getElementById('digitalClock').textContent = `${hours}:${minutes}:${seconds}`;
+      
+      const clock = document.getElementById('digitalClock');
+      
+      if (!clock.querySelector('.seconds')) {
+        clock.innerHTML = `${hours}:${minutes}<span class="seconds">:${seconds}</span>`;
+        secondsElement = clock.querySelector('.seconds');
+      } else {
+        const timeText = clock.childNodes[0];
+        const secondsSpan = clock.querySelector('.seconds');
+        
+        if (timeText && timeText.nodeType === 3) {
+          timeText.textContent = `${hours}:${minutes}`;
+        }
+        if (secondsSpan) {
+          secondsSpan.textContent = `:${seconds}`;
+        }
+      }
     }
     
     updateDigitalClock();
     setInterval(updateDigitalClock, 1000);
+    
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      const clock = document.getElementById('digitalClock');
+      
+      if (!secondsElement) {
+        secondsElement = clock.querySelector('.seconds');
+      }
+      
+      const maxScroll = 150;
+      const scrollPercent = Math.min(currentScroll / maxScroll, 1);
+      
+      const fontSize = 20 - (12 * scrollPercent);
+      clock.style.fontSize = fontSize + 'vw';
+      
+      if (secondsElement) {
+        if (scrollPercent > 0) {
+          secondsElement.style.opacity = scrollPercent;
+          secondsElement.style.width = 'auto';
+        } else {
+          secondsElement.style.opacity = '0';
+          secondsElement.style.width = '0';
+        }
+      }
+    });
     
     function toggleCheckAll() {
       const checkAll = document.getElementById('checkAll');
@@ -628,13 +1117,11 @@
         return;
       }
       
-      if (!confirm(`${checkboxes.length}개의 알람을 삭제하시겠습니까?`)) {
-        return;
-      }
-      
       const indices = Array.from(checkboxes).map(cb => parseInt(cb.dataset.index)).sort((a, b) => b - a);
       
       indices.forEach(index => {
+        const time = alarms[index];
+        delete alarmSounds[time]; // 알림음도 삭제
         alarms.splice(index, 1);
       });
       
@@ -643,20 +1130,90 @@
       alert('선택한 알람이 삭제되었습니다.');
     }
     
+    // 컨텍스트 메뉴 표시
+    function showContextMenu(event, index) {
+      event.preventDefault();
+      contextMenuIndex = index;
+      
+      const menu = document.getElementById('contextMenu');
+      menu.style.display = 'block';
+      
+      // 마우스 위치에서 스크롤 위치를 빼서 정확한 위치 계산
+      const x = event.clientX;
+      const y = event.clientY;
+      
+      menu.style.left = x + 'px';
+      menu.style.top = y + 'px';
+    }
+
+    // 컨텍스트 메뉴에서 복제
+    function duplicateAlarm() {
+      if (contextMenuIndex !== -1) {
+        const originalTime = alarms[contextMenuIndex];
+        const originalSound = alarmSounds[originalTime] || 'beep';
+        
+        // 시간을 1분 뒤로 설정
+        const [hours, minutes] = originalTime.split(':').map(Number);
+        const newMinutes = (minutes + 1) % 60;
+        const newHours = minutes === 59 ? (hours + 1) % 24 : hours;
+        const newTime = `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
+        
+        if (!alarms.includes(newTime)) {
+          alarms.push(newTime);
+          alarmSounds[newTime] = originalSound;
+          saveToLocalStorage();
+          displayAlarms();
+          alert(`알람이 복제되었습니다: ${newTime}`);
+        } else {
+          alert('해당 시간에 이미 알람이 설정되어 있습니다.');
+        }
+      }
+      hideContextMenu();
+    }
+
+    // 컨텍스트 메뉴에서 삭제
+    function deleteAlarmFromContext() {
+      if (contextMenuIndex !== -1) {
+        const time = alarms[contextMenuIndex];
+        delete alarmSounds[time];
+        alarms.splice(contextMenuIndex, 1);
+        saveToLocalStorage();
+        displayAlarms();
+        alert('알람이 삭제되었습니다.');
+      }
+      hideContextMenu();
+    }
+
+    // 컨텍스트 메뉴 숨기기
+    function hideContextMenu() {
+      document.getElementById('contextMenu').style.display = 'none';
+      contextMenuIndex = -1;
+    }
+    
     function deleteAll() {
       if (alarms.length === 0) {
         alert('삭제할 알람이 없습니다!');
         return;
       }
       
-      if (!confirm(`모든 알람(${alarms.length}개)을 삭제하시겠습니까?`)) {
-        return;
-      }
-      
+      // 확인 모달 표시
+      document.getElementById('confirmMessage').textContent = `모든 알람(${alarms.length}개)을 삭제하시겠습니까?`;
+      document.getElementById('confirmModal').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function confirmDeleteAll() {
       alarms = [];
+      alarmSounds = {}; // 모든 알림음도 삭제
       saveToLocalStorage();
       displayAlarms();
+      cancelDeleteAll();
       alert('모든 알람이 삭제되었습니다.');
+    }
+
+    function cancelDeleteAll() {
+      document.getElementById('confirmModal').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
     }
   </script>
 </body>
